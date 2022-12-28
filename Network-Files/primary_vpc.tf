@@ -7,7 +7,9 @@ resource "aws_vpc" "network_vpc" {
   assign_generated_ipv6_cidr_block = local.assign_generated_ipv6_cidr_block
 
   tags = merge(
-    { "Name" = "${local.primary_vpc_name}" },
+    { "Name" = "${local.primary_vpc_name}",
+      "flowlog" = "enable"
+    },
     local.common_tags
   )
 }
