@@ -58,6 +58,35 @@ locals {
   private_r53_zone_ssm_endpoint = "<endpoint-service>"
   account_list_endpoint = ["<Account-name>", "<Account-name>", "<Account-name>"]
  
+  # ALL Other VPC ENDPOINTS [phz-auth-vpcendpoint-record.tf]
+  names_of_service     = ["sns", "sqs", "rds", "elasticache", "backup", "ecr.dkr", "eks", "ecs", "glue", "elasticbeanstalk"]
+  all_account_list_vpc = ["account-name", "account-name", "account-name"]
+  vpc_endpoint_authorization_list = flatten([
+    for account_name in local.all_account_list_vpc : [
+      for endpoint_name in local.names_of_service : {
+        account_name   = account_name
+        endpoint_hz_id = aws_route53_zone.all_endpoint_route53_zone[endpoint_name].id
+      }
+    ]
+  ])
+
+  # ZONE ACCEPtance in each acount-shared hosted_zone_asso_accept.tf
+     names_of_asso_service = [
+    "sns_zone_id",
+    "sqs_zone_id",
+    "rds_zone_id",
+    "elasticache_zone_id",
+    "backup_zone_id",
+    "ecr_dkr_zone_id",
+    "eks_zone_id",
+    "ecs_zone_id",
+    "glue_zone_id",
+    "elasticbeanstalk_zone_id"
+  ]
+
+  vpc_endpoint_ssm_parameter_path = "/mm/aft/account_customization/output/account-lz2.0-common/"
+
+
   primary_igw_name           = "<public_igw-name>"
   public_nat_rt_name         = "<name>"
   private_tgw_rt_name        = "<name>"
@@ -83,10 +112,24 @@ locals {
 
   # export outputs of type string
   export_output = {
-    vpc_id            = aws_vpc.shared_dev_vpc.id
-    vpc_cidr          = aws_vpc.shared_dev_vpc.cidr_block
-    tgw_attachment_id = aws_ec2_transit_gateway_vpc_attachment.tgw_network.id
+    vpc_id                   = aws_vpc.comsrv_vpc.id
+    vpc_cidr                 = aws_vpc.comsrv_vpc.cidr_block
+    tgw_attachment_id        = aws_ec2_transit_gateway_vpc_attachment.tgw_network.id
+    ssm_endpoint_id          = aws_route53_zone.ssm_endpoint_route53_zone.id
+    ssmmessages_endpoint_id  = aws_route53_zone.ssmmessages_endpoint_route53_zone.id
+    ec2messages_endpoint_id  = aws_route53_zone.ec2messages_endpoint_route53_zone.id
+    sns_zone_id              = aws_route53_zone.all_endpoint_route53_zone["sns"].id
+    sqs_zone_id              = aws_route53_zone.all_endpoint_route53_zone["sqs"].id
+    rds_zone_id              = aws_route53_zone.all_endpoint_route53_zone["rds"].id
+    elasticache_zone_id      = aws_route53_zone.all_endpoint_route53_zone["elasticache"].id
+    backup_zone_id           = aws_route53_zone.all_endpoint_route53_zone["backup"].id
+    ecr_dkr_zone_id          = aws_route53_zone.all_endpoint_route53_zone["ecr.dkr"].id
+    eks_zone_id              = aws_route53_zone.all_endpoint_route53_zone["eks"].id
+    ecs_zone_id              = aws_route53_zone.all_endpoint_route53_zone["ecs"].id
+    glue_zone_id             = aws_route53_zone.all_endpoint_route53_zone["glue"].id
+    elasticbeanstalk_zone_id = aws_route53_zone.all_endpoint_route53_zone["elasticbeanstalk"].id
   }
+
   # export outputs of type list
   export_list_output = {
 
