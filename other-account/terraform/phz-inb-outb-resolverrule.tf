@@ -227,7 +227,7 @@ resource "aws_route53_resolver_rule" "<name>" {
 }
 
 # onprem_res_rule_01 sharing with private shared accounts
-resource "aws_ram_resource_share" "<name>" {
+resource "aws_ram_resource_share" "<resource_name>" {
   name                      = "<name>"
   allow_external_principals = false
   tags                      = local.common_tags
@@ -235,13 +235,13 @@ resource "aws_ram_resource_share" "<name>" {
 }
 resource "aws_ram_resource_association" "resolver-rule-onprem_mum_assoc" {
   resource_arn       = aws_route53_resolver_rule.onprem_res_rule_01.arn
-  resource_share_arn = aws_ram_resource_share.<name>.arn
+  resource_share_arn = aws_ram_resource_share.resource_name.arn
 }
 
 resource "aws_ram_principal_association" "resolver_rule_aws_mm_cloud_onprem" {
   count              = length(local.account_number_list)
   principal          = local.account_number_list[count.index]
-  resource_share_arn = aws_ram_resource_share.<name>.arn
+  resource_share_arn = aws_ram_resource_share.resource_name.arn
 }
 
 #------------------------------------------------------------------------------------------------------------------------------
