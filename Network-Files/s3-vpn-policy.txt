@@ -1,0 +1,24 @@
+{
+    "Version": "2012-10-17",
+    "Id": "Policy1680697574009",
+    "Statement": [
+        {
+            "Sid": "Stmt1680697498158",
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "logs.amazonaws.com"
+            },
+            "Action": "s3:PutObject",
+            "Resource": "arn:aws:s3:::s3-aws-net-mvpn-logs/*"
+        },
+        {
+            "Sid": "Stmt1680697572456",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::468780636783:root"
+            },
+            "Action": "s3:PutObject",
+            "Resource": "arn:aws:s3:::s3-aws-net-mvpn-logs/*"
+        }
+    ]
+}
