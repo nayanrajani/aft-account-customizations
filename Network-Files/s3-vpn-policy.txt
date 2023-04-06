@@ -9,16 +9,16 @@
                 "Service": "logs.amazonaws.com"
             },
             "Action": "s3:PutObject",
-            "Resource": "arn:aws:s3:::s3-aws-net-mvpn-logs/*"
+            "Resource": "arn:aws:s3:::{Bucket name}/*"
         },
         {
             "Sid": "Stmt1680697572456",
             "Effect": "Allow",
             "Principal": {
-                "AWS": "arn:aws:iam::468780636783:root"
+                "AWS": "arn:aws:iam::{Network-Account-id}:root"
             },
             "Action": "s3:PutObject",
-            "Resource": "arn:aws:s3:::s3-aws-net-mvpn-logs/*"
+            "Resource": "arn:aws:s3:::{Bucket name}/*"
         }
     ]
 }
