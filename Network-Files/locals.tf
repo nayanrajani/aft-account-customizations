@@ -4,19 +4,27 @@ locals {
   primary_region     = "<primary-region>"
   availability_zones = ["${local.primary_region}a", "${local.primary_region}b"]
 
-  primary_vpc_cidr        = "<primary_vpc_cidr>"
+  primary_vpc_cidr = "<primary_vpc_cidr>"
+
+  #VPN
+  vpn_log_retention_days        = 1
+  cloudwatch_logs_export_bucket = "{bucket-name}"
+  log_archive_account_id        = module.aft_account_list.param_name_values["${local.ssm_parameter_path_account_list}account-lz-log-archive"]
+  vpn_log_export_rate           = "rate(4 hours)"
+  enable_vpn_log_export         = true
+
 
   # to fetch via ssm 
-  xyz_account_vpc_cidr     = module.aft_accounts_info.param_name_values["${local.ssm_parameter_path}<account-name>/vpc_cidr"]
+  xyz_account_vpc_cidr = module.aft_accounts_info.param_name_values["${local.ssm_parameter_path}<account-name>/vpc_cidr"]
 
-  
-  mitc_s2s_route = "<vpn cidr>"  //if require to create new vpn an its route
-  mrv_s2s_route = "<vpn cidr>"  //if require to create new vpn an its route
 
-  mrv_tgw_attachment_id   = "<attachment-id>"
-  mitc_tgw_attachment_id  = "<attachment-id>"
-  dx_pri_attachment_id    = "<attachment-id>"
-  dx_sec_attachment_id    = "<attachment-id>"
+  mitc_s2s_route = "<vpn cidr>" //if require to create new vpn an its route
+  mrv_s2s_route  = "<vpn cidr>" //if require to create new vpn an its route
+
+  mrv_tgw_attachment_id  = "<attachment-id>"
+  mitc_tgw_attachment_id = "<attachment-id>"
+  dx_pri_attachment_id   = "<attachment-id>"
+  dx_sec_attachment_id   = "<attachment-id>"
 
   private_subnet_list     = ["<cidr_1>", "<cidr_2>"]
   private_subnet_name     = ["<subnet_name_1>", "<subnet_name_2>"]
@@ -27,14 +35,14 @@ locals {
   enable_dns_hostnames             = true
   assign_generated_ipv6_cidr_block = false
 
-  tgw_name          = "<tgw_name_1>"
-  tgw_aws_asn       = tgw_asn_number //add number here only
-  root_ou_arn       = "arn:aws:organizations::${module.aft_account_list.param_name_values["${local.ssm_parameter_path_account_list}<master-account-name>"]}:organization/${data.aws_ssm_parameter.master_org_id.value}"
+  tgw_name    = "<tgw_name_1>"
+  tgw_aws_asn = tgw_asn_number //add number here only
+  root_ou_arn = "arn:aws:organizations::${module.aft_account_list.param_name_values["${local.ssm_parameter_path_account_list}<master-account-name>"]}:organization/${data.aws_ssm_parameter.master_org_id.value}"
 
   common_tags = {
-    tag-key           = "<tag-value>"
-    tag-key           = "<tag-value>"
-    tag-key           = "<tag-value>"
+    tag-key = "<tag-value>"
+    tag-key = "<tag-value>"
+    tag-key = "<tag-value>"
   }
 
   ssm_parameter_path              = "/mm/aft/account_customization/output/"
